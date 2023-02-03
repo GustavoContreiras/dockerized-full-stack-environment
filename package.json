@@ -1,7 +1,7 @@
 {
   "name": "dockerized-full-stack-environment",
   "version": "1.0.0",
-  "description": "",
+  "description": "Dockerized environment with a database, a back-end and a front-end application.",
   "scripts": {
     "build:back": "docker-compose build nestjs-app",
     "build:front": "docker-compose build nextjs-app",
