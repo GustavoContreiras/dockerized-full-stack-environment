@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build:db": "docker-compose build mysql-db",
     "build:back": "docker-compose build nestjs-app",
     "build:front": "docker-compose build nextjs-app",
     "start:db": "docker-compose up mysql-db",
