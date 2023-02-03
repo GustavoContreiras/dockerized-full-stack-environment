@@ -1,0 +1,70 @@
+version: '3.8'
+
+networks:
+  default:
+
+services:
+
+  mysql-db:
+    container_name:  mysql-db
+    image: mysql:5.7
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
+    # (this is just an example, not intended to be a production configuration)
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQLDB_PASSWORD
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - mysql-volume:/var/lib/mysql:rw
+      - ./mysql-db:/docker-entrypoint-initdb.d/
+    networks:
+      - default
+
+  nestjs-app:
+    container_name: nestjs-app
+    # depends_on:
+    #   - mysql-db
+    build: ./nestjs-app
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NESTJS_APP_LOCAL_PORT:$NESTJS_APP_DOCKER_PORT
+    environment:
+      - DB_HOST=$MYSQLDB_HOST
+      - DB_USER=$MYSQLDB_USER
+      - DB_PASSWORD=$MYSQLDB_PASSWORD
+      - DB_DATABASE=$MYSQLDB_DATABASE
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./nestjs-app:/app
+      - /app/node_modules
+    networks:
+      - default
+    
+  nextjs-app:
+    container_name: nextjs-app
+    # depends_on: 
+      # - nestjs-app
+    build:
+      context: ./nextjs-app
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NEXTJS_APP_LOCAL_PORT:$NEXTJS_APP_DOCKER_PORT
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./nextjs-app:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - default
+
+volumes: 
+  mysql-volume:

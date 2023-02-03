@@ -1,0 +1,2 @@
+USE DOCKERIZED;
+INSERT INTO users VALUES(1, "Test");

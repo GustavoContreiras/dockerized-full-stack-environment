@@ -1,0 +1,16 @@
+{
+  "name": "dockerized-full-stack-environment",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build:db": "docker-compose build mysql-db",
+    "build:back": "docker-compose build nestjs-app",
+    "build:front": "docker-compose build nextjs-app",
+    "start:db": "docker-compose up mysql-db",
+    "start:back": "docker-compose up nestjs-app --renew-anon-volumes",
+    "start:front": "docker-compose up nextjs-app --renew-anon-volumes",
+    "clean": "docker-compose down -v"
+  },
+  "author": "",
+  "license": "ISC"
+}
