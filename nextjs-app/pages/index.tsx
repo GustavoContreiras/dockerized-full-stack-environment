@@ -2,10 +2,26 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
+import { useEffect, useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    fetch('http://localhost:3001/users', {
+      headers: {
+        mode: 'cors'
+      }
+    })
+      .then((response: Response) => response.json())
+      .then((users: any) => {
+        setUsers(users)
+      })
+  }, [])
+
   return (
     <>
       <Head>
@@ -40,7 +56,14 @@ export default function Home() {
         </div>
 
         <div className={styles.center}>
-          <Image
+          {users.map((user: any) => {
+            return (
+              <div key={`user-${user.id}`}>
+                <span>#{user.id} {user.name}</span><br />
+              </div>
+            )
+          })}
+          {/* <Image
             className={styles.logo}
             src="/next.svg"
             alt="Next.js Logo"
@@ -56,7 +79,7 @@ export default function Home() {
               height={31}
               priority
             />
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.grid}>
