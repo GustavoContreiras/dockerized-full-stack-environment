@@ -71,7 +71,7 @@ Run `docker-compose up`
 
 Run `npm run clean` or `docker-compose down -v`
 
-## Please leave a ⭐ if it helped you.
+## Please  if it helped you
 
 ## Useful links
 
